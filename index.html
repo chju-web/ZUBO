@@ -1,31 +1,44 @@
 
-<script>
-  const status = document.getElementById('status');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZUBO Token</title>
+  <script src="https://unpkg.com/@tonconnect/ui@5.0.3/dist/tonconnect-ui.min.js"></script>
+</head>
+<body style="background:#101722;color:white;font-family:Arial;padding:30px">
 
-  window.addEventListener('ton-connect-ui-connection-error', event => {
-    status.textContent =
-      'UI ERROR: ' + JSON.stringify(event.detail);
-  });
+  <h1>ZUBO Token</h1>
+  <p>Connect your TON wallet</p>
 
-  window.addEventListener('ton-connect-connection-error', event => {
-    status.textContent =
-      'CONNECT ERROR: ' + JSON.stringify(event.detail);
-  });
+  <div id="ton-connect"></div>
+  <p id="status">Initializing wallet connection...</p>
 
-  window.addEventListener('unhandledrejection', event => {
-    status.textContent =
-      'JS ERROR: ' + String(event.reason);
-  });
+  <script>
+    const status = document.getElementById('status');
 
-  const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl:
-      'https://chju-web.github.io/ZUBO/tonconnect-manifest.json',
-    buttonRootId: 'ton-connect'
-  });
+    window.addEventListener('unhandledrejection', event => {
+      status.textContent = 'Error: ' + String(event.reason);
+    });
 
-  tonConnectUI.onStatusChange(wallet => {
-    status.textContent = wallet
-      ? 'CONNECTED: ' + wallet.account.address
-      : 'NOT CONNECTED';
-  });
-</script>
+    try {
+      const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl:
+          'https://chju-web.github.io/ZUBO/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect'
+      });
+
+      tonConnectUI.onStatusChange(wallet => {
+        status.textContent = wallet
+          ? 'CONNECTED: ' + wallet.account.address
+          : 'NOT CONNECTED';
+      });
+
+    } catch (error) {
+      status.textContent = 'Initialization error: ' + error.message;
+    }
+  </script>
+
+</body>
+</html>
