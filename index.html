@@ -1,10 +1,29 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ZUBO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZUBO Token</title>
+  <script src="https://unpkg.com/@tonconnect/ui@5.0.3/dist/tonconnect-ui.min.js"></script>
 </head>
 <body>
-  <h1>ZUBO Token</h1>
+  <h2>ZUBO Token Launcher</h2>
+
+  <div id="ton-connect"></div>
+  <p id="status">Wallet not connected</p>
+
+  <script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://chju-web.github.io/ZUBO/tonconnect-manifest.json',
+      buttonRootId: 'ton-connect'
+    });
+
+    tonConnectUI.onStatusChange(wallet => {
+      document.getElementById('status').textContent =
+        wallet ? 'Wallet connected: ' + wallet.account.address
+               : 'Wallet not connected';
+    });
+  </script>
 </body>
 </html>
